@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>La Gran Odisea — Itinerario</title>
+<title>Viaje especial para una persona especial — Itinerario</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -34,6 +34,7 @@
     margin:0;
     font-family:'Work Sans', sans-serif;
     color:var(--ink);
+    position:relative;
     background:linear-gradient(180deg,
       var(--dawn) 0%,
       var(--day-sky) 16%,
@@ -49,6 +50,39 @@
   }
 
   a{color:inherit;}
+
+  /* ---------- foto de fondo difuminada ---------- */
+  /* Sube tu foto como imagenes/fondo.jpg. Si no existe, no pasa nada:
+     solo se ve el degradado de siempre. */
+  .bg-photo{
+    position:fixed;
+    inset:-24px;
+    z-index:-1;
+    background-image:url('imagenes/fondo.jpg');
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    filter:blur(3px) saturate(1.1);
+    transform:scale(1.06);
+    pointer-events:none;
+  }
+  .bg-gradient{
+    position:absolute;
+    top:0; left:0; right:0; bottom:0;
+    z-index:-1;
+    background:linear-gradient(180deg,
+      var(--dawn) 0%,
+      var(--day-sky) 16%,
+      var(--day-sky) 40%,
+      var(--dusk) 58%,
+      var(--night) 70%,
+      var(--night) 82%,
+      var(--dawn2) 94%,
+      var(--dawn2) 100%
+    );
+    opacity:0.3;
+    pointer-events:none;
+  }
 
   /* ---------- progress bar ---------- */
   .progress{
@@ -324,9 +358,133 @@
     .stop__stamp{left:-48px; width:40px; height:40px;}
     .stop__stamp svg{width:20px; height:20px;}
   }
+
+  /* ---------- gate / pantalla inicial ---------- */
+  html.is-locked, body.is-locked{overflow:hidden; height:100%;}
+  body.is-locked .wrap, body.is-locked .progress{visibility:hidden;}
+
+  .gate{
+    position:fixed; inset:0; z-index:1000;
+    display:flex; align-items:center; justify-content:center;
+    padding:24px;
+    background:linear-gradient(160deg, rgba(21,32,53,0.72) 0%, rgba(27,39,64,0.72) 100%);
+    opacity:1; visibility:visible;
+    transition:opacity 0.6s ease, visibility 0.6s ease;
+  }
+  .gate.is-unlocked{opacity:0; visibility:hidden; pointer-events:none;}
+
+  .gate__card{
+    background:var(--paper);
+    border-radius:18px;
+    padding:40px 34px 32px;
+    max-width:420px;
+    width:100%;
+    text-align:center;
+    box-shadow:0 30px 70px -20px rgba(0,0,0,0.65);
+  }
+  .gate__card.shake{animation:gateShake 0.5s ease;}
+  @keyframes gateShake{
+    10%,90%{transform:translateX(-2px);}
+    20%,80%{transform:translateX(3px);}
+    30%,50%,70%{transform:translateX(-6px);}
+    40%,60%{transform:translateX(6px);}
+  }
+
+  .gate__eyebrow{
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--day1);
+    margin:0 0 14px;
+    font-weight:700;
+  }
+  .gate__intro{
+    font-size:14.5px;
+    line-height:1.55;
+    color:rgba(30,42,56,0.78);
+    margin:0 0 26px;
+  }
+  .gate__phrase{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:clamp(19px, 5vw, 24px);
+    line-height:1.5;
+    margin:0 0 8px;
+  }
+  .gate__phrase input{
+    font-family:inherit;
+    font-weight:inherit;
+    font-size:inherit;
+    color:var(--ink);
+    border:none;
+    border-bottom:2px solid var(--day1);
+    background:transparent;
+    width:min(230px, 60vw);
+    text-align:center;
+    outline:none;
+    padding:0 2px 2px;
+  }
+  .gate__error{
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    color:#B23A3A;
+    min-height:16px;
+    margin:2px 0 18px;
+    opacity:0;
+    transition:opacity 0.2s ease;
+  }
+  .gate__error.is-visible{opacity:1;}
+  .gate__btn{
+    font-family:'Space Mono', monospace;
+    font-size:13px;
+    letter-spacing:0.04em;
+    background:var(--ink);
+    color:var(--paper-soft);
+    border:none;
+    padding:12px 28px;
+    border-radius:999px;
+    cursor:pointer;
+  }
+  .gate__btn:hover{opacity:0.88;}
+
+  /* ---------- control de música ---------- */
+  .audio-toggle{
+    position:fixed; right:18px; bottom:18px; z-index:60;
+    width:46px; height:46px;
+    border-radius:50%;
+    background:var(--paper);
+    border:2px solid var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    box-shadow:0 10px 22px -10px rgba(21,31,53,0.55);
+    opacity:0; pointer-events:none;
+    transition:opacity 0.4s ease;
+  }
+  .audio-toggle.is-ready{opacity:1; pointer-events:auto;}
+  .audio-toggle.is-hidden{display:none;}
+  .audio-toggle svg{width:22px; height:22px; color:var(--ink);}
+  .audio-toggle.is-muted #wavePath,
+  .audio-toggle.is-muted #waveOuterPath{opacity:0.25;}
+  .audio-toggle.is-muted #muteSlash{opacity:1;}
 </style>
 </head>
-<body>
+<body class="is-locked">
+
+<div class="bg-photo" aria-hidden="true"></div>
+<div class="bg-gradient" aria-hidden="true"></div>
+
+<div class="gate" id="gate">
+  <div class="gate__card" id="gateCard">
+    <p class="gate__eyebrow">Antes de empezar</p>
+    <p class="gate__intro">Esta ruta fue pensada en todo lo que te gusta y trate de incluir un poquito de todo, espero sea de tu agrado. Completa la frase para abrir el itinerario.</p>
+    <form id="gateForm" autocomplete="off" novalidate>
+      <p class="gate__phrase">"Jamás uno, <input type="text" id="gateInput" name="gateInput" autocomplete="off" spellcheck="false" autofocus aria-label="Completa la frase para continuar" required>"</p>
+      <p class="gate__error" id="gateError" role="alert">Esa no es… inténtalo de nuevo.</p>
+      <button type="submit" class="gate__btn">Abrir el itinerario</button>
+    </form>
+  </div>
+</div>
 
 <svg width="0" height="0" style="position:absolute">
   <filter id="inkTexture" x="-20%" y="-20%" width="140%" height="140%">
@@ -342,7 +500,7 @@
   <header class="hero">
     <div class="hero__ticket">
       <p class="hero__eyebrow">Pase de abordar · ruta única</p>
-      <h1 class="hero__title">La Gran<br>Odisea</h1>
+      <h1 class="hero__title">Viaje especial para una<br>Persona especial</h1>
       <p class="hero__sub">Un itinerario de dos días que empieza en la puerta de casa y no termina hasta que la vida cotidiana vuelve a reclamarnos. Toca cada sello del camino para ver el detalle.</p>
       <div class="hero__meta">
         <div><span>Origen</span><strong>Puerta de casa</strong></div>
@@ -374,6 +532,17 @@
 
 </div>
 
+<!-- Música de fondo: sube tu archivo como audio/melodia.mp3 en el repositorio -->
+<audio id="bgAudio" src="audio/melodia.mp3" loop preload="auto"></audio>
+<button type="button" class="audio-toggle" id="audioToggle" aria-label="Silenciar música">
+  <svg id="audioIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 9v6h4l5 4V5L8 9H4z"/>
+    <path id="wavePath" d="M15.5 9a4 4 0 0 1 0 6"/>
+    <path id="waveOuterPath" d="M18.5 6.5a8 8 0 0 1 0 11"/>
+    <line id="muteSlash" x1="3" y1="3" x2="21" y2="21" stroke="#B23A3A" stroke-width="2" opacity="0"/>
+  </svg>
+</button>
+
 <script>
 const ICONS = {
   car_heart: `<path d="M4 26v-4l3-8h18l3 8v4M4 26h4M20 26h4M8 22h16" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="26" r="2.4" stroke-width="1.6" fill="none"/><circle cx="23" cy="26" r="2.4" stroke-width="1.6" fill="none"/><path d="M16 9c-1.4-2-4.6-1.6-4.6 1 0 2.1 2.6 3.6 4.6 5.4 2-1.8 4.6-3.3 4.6-5.4 0-2.6-3.2-3-4.6-1z" stroke-width="1.4" fill="none" stroke-linejoin="round"/>`,
@@ -398,7 +567,7 @@ const ICONS = {
 
 const DATA = [
   { day:1, time:"10:30", text:"Pasar por la dama en cuestión", icon:"car_heart", caption:"Con el coche listo y la primera playlist del viaje ya sonando." },
-  { day:1, time:"11:30", text:"Desayuno en GNZLZ para iniciar con energía", icon:"coffee", caption:"Café fuerte y algo dulce antes de que empiece lo bueno." },
+  { day:1, time:"11:30", text:"Desayuno en GNZLZ para iniciar con energía", icon:"coffee", caption:"Café fuerte (para el caballero) y algo dulce antes de que empiece lo bueno." },
   { day:1, time:"13:00", text:"Parada técnica para recolección de suministros", icon:"bag", caption:"Lo esencial: agua, snacks y todo lo que se nos pudo olvidar." },
   { day:1, time:"13:30", text:"Salida rumbo a destino, el inicio de la odisea", icon:"compass", caption:"Carretera abierta y el destino todavía es un secreto a medias." },
   { day:1, time:"14:30", text:"Primer parada Museo de las Momias (mis tías jajaja)", icon:"mummy", caption:"Una parada entre sustos, historia y risas nerviosas." },
@@ -488,6 +657,64 @@ function updateProgress(){
 window.addEventListener('scroll', updateProgress, { passive:true });
 window.addEventListener('resize', updateProgress);
 updateProgress();
+
+/* ---------- pantalla inicial (gate) ---------- */
+const SECRET_ANSWER = "sin el otro"; // lo que falta de "Jamás uno, ___"
+function normalize(str){
+  return str.trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+const gate = document.getElementById('gate');
+const gateCard = document.getElementById('gateCard');
+const gateForm = document.getElementById('gateForm');
+const gateInput = document.getElementById('gateInput');
+const gateError = document.getElementById('gateError');
+const bgAudio = document.getElementById('bgAudio');
+const audioToggle = document.getElementById('audioToggle');
+
+gateForm.addEventListener('submit', function(e){
+  e.preventDefault();
+  if(normalize(gateInput.value) === SECRET_ANSWER){
+    unlockItinerary();
+  } else {
+    gateError.classList.add('is-visible');
+    gateCard.classList.remove('shake');
+    void gateCard.offsetWidth; // reinicia la animación
+    gateCard.classList.add('shake');
+    gateInput.value = '';
+    gateInput.focus();
+  }
+});
+
+function unlockItinerary(){
+  document.body.classList.remove('is-locked');
+  gate.classList.add('is-unlocked');
+  gate.setAttribute('aria-hidden', 'true');
+  setTimeout(function(){ gate.style.display = 'none'; }, 650);
+
+  bgAudio.volume = 0.55;
+  const playPromise = bgAudio.play();
+  if(playPromise !== undefined){
+    playPromise.then(function(){
+      audioToggle.classList.add('is-ready');
+    }).catch(function(){
+      // el navegador bloqueó el autoplay; se muestra el botón igual para que lo activen a mano
+      audioToggle.classList.add('is-ready');
+    });
+  } else {
+    audioToggle.classList.add('is-ready');
+  }
+}
+
+audioToggle.addEventListener('click', function(){
+  bgAudio.muted = !bgAudio.muted;
+  audioToggle.classList.toggle('is-muted', bgAudio.muted);
+  audioToggle.setAttribute('aria-label', bgAudio.muted ? 'Activar música' : 'Silenciar música');
+});
+
+bgAudio.addEventListener('error', function(){
+  audioToggle.classList.add('is-hidden');
+});
 </script>
 </body>
 </html>
